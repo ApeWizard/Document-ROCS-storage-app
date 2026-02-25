@@ -13,6 +13,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { ADMIN_USERNAME, ADMIN_PASSWORD } from '../mockData';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -22,8 +23,14 @@ export default function LoginPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    const isAdmin =
+      username.trim().toLowerCase() === ADMIN_USERNAME &&
+      password === ADMIN_PASSWORD;
+
     localStorage.setItem('rocs_logged_in', 'true');
-    navigate('/', { replace: true });
+    localStorage.setItem('rocs_role', isAdmin ? 'admin' : 'client');
+
+    navigate(isAdmin ? '/admin/clients' : '/', { replace: true });
   };
 
   return (
@@ -109,6 +116,13 @@ export default function LoginPage() {
         >
           Sign In
         </Button>
+
+        <Typography
+          variant="caption"
+          sx={{ display: 'block', textAlign: 'center', mt: 2, color: 'text.secondary' }}
+        >
+          Demo: admin / admin123 or john / password
+        </Typography>
       </Paper>
     </Box>
   );
